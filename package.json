@@ -5,7 +5,10 @@
   "description": "Canonical design system for hub projects — DTCG tokens + shadcn local registry.",
   "type": "module",
   "scripts": {
-    "build-tokens": "node scripts/build-tokens.mjs"
+    "build-tokens": "node scripts/build-tokens.mjs",
+    "vrt": "node scripts/vrt.mjs",
+    "vrt:update": "node scripts/vrt.mjs --update",
+    "vrt:dry": "node scripts/vrt.mjs --dry-run"
   },
   "exports": {
     "./registry/styles/globals.css": "./registry/styles/globals.css",
@@ -14,6 +17,10 @@
     "./lib/utils": "./registry/lib/utils.ts"
   },
   "devDependencies": {
+    "@playwright/test": "^1.59.1",
+    "pixelmatch": "^7.1.0",
+    "playwright": "^1.59.1",
+    "pngjs": "^7.0.0",
     "style-dictionary": "^4.4.0"
   }
 }

@@ -1,0 +1,104 @@
+{
+  "$schema": "./vrt.config.schema.json",
+  "defaults": {
+    "viewport": { "width": 1280, "height": 800 },
+    "threshold": 0.001,
+    "diffThreshold": 0.1,
+    "bootTimeoutMs": 90000,
+    "navTimeoutMs": 30000,
+    "animations": "disabled"
+  },
+  "apps": {
+    "homelab-admin": {
+      "cwd": "../homelab/apps/admin",
+      "port": 4847,
+      "bootCmd": ["bun", "run", "dev", "--", "-p", "4847", "-H", "127.0.0.1"],
+      "baseUrl": "http://127.0.0.1:4847",
+      "readyPath": "/login",
+      "env": {
+        "AUTH_SECRET": "vrt-test-secret-00000000000000000000000000000000",
+        "AUTH_URL": "http://127.0.0.1:4847",
+        "HOMELAB_ADMIN_GITHUB_OAUTH_CLIENT_ID": "vrt-stub",
+        "HOMELAB_ADMIN_GITHUB_OAUTH_CLIENT_SECRET": "vrt-stub",
+        "HOMELAB_ADMIN_ALLOWED_GITHUB_LOGINS": "vrt-user",
+        "AUDIT_DB_PATH": "/tmp/vrt-homelab-audit.db",
+        "NODE_ENV": "development"
+      },
+      "routes": [
+        { "slug": "login",  "path": "/login" },
+        { "slug": "403",    "path": "/403" }
+      ],
+      "deferred": [
+        { "path": "/",                   "reason": "requires GitHub OAuth session" },
+        { "path": "/voidnet/users",      "reason": "requires auth" },
+        { "path": "/proxmox",            "reason": "requires auth + proxmox service" },
+        { "path": "/proxmox/[vmid]",     "reason": "requires auth + proxmox service + vmid fixture" },
+        { "path": "/alerts",             "reason": "requires auth + alert data" },
+        { "path": "/audit",              "reason": "requires auth + audit.db" },
+        { "path": "/tokens",             "reason": "requires auth" },
+        { "path": "/tokens/[id]",        "reason": "requires auth + token id fixture" }
+      ]
+    },
+    "voidnet-portal": {
+      "cwd": "../voidnet/apps/portal",
+      "port": 4848,
+      "bootCmd": ["bun", "run", "dev", "--", "-p", "4848", "-H", "127.0.0.1"],
+      "baseUrl": "http://127.0.0.1:4848",
+      "readyPath": "/login",
+      "env": {
+        "NODE_ENV": "development",
+        "VOIDNET_DATABASE_URL": "postgres://vrt:vrt@127.0.0.1:5432/vrt_disabled",
+        "VOIDNET_HMAC_SECRET": "vrt-test-hmac-secret",
+        "SKIP_DB_CHECKS": "1"
+      },
+      "routes": [
+        { "slug": "landing", "path": "/" },
+        { "slug": "login",   "path": "/login" },
+        { "slug": "join",    "path": "/join" },
+        { "slug": "403",     "path": "/403" }
+      ],
+      "deferred": [
+        { "path": "/join/verify",       "reason": "requires pending invite state + email OTP flow" },
+        { "path": "/dashboard",         "reason": "requires authenticated voidnet_session" },
+        { "path": "/topup",             "reason": "requires auth + billing fixtures" },
+        { "path": "/profile",           "reason": "requires auth" },
+        { "path": "/invites",           "reason": "requires auth" },
+        { "path": "/username",          "reason": "requires auth" },
+        { "path": "/services/vpn",      "reason": "requires auth + services_catalog row" },
+        { "path": "/services/claude-key", "reason": "requires auth + services_catalog row" },
+        { "path": "/services/[slug]",   "reason": "requires auth + dynamic slug fixture" },
+        { "path": "/admin",             "reason": "requires Tailscale CGNAT header + admin role" },
+        { "path": "/admin/*",           "reason": "all admin pages: Tailscale CGNAT + admin role" }
+      ]
+    },
+    "animaya-dashboard": {
+      "cwd": "../animaya/dashboard",
+      "port": 4849,
+      "bootCmd": ["bun", "run", "dev", "--", "-p", "4849", "-H", "127.0.0.1"],
+      "baseUrl": "http://127.0.0.1:4849",
+      "readyPath": "/login",
+      "env": {
+        "AUTH_SECRET": "vrt-test-secret-00000000000000000000000000000000",
+        "AUTH_URL": "http://127.0.0.1:4849",
+        "NODE_ENV": "development",
+        "TELEGRAM_BOT_TOKEN": "0:vrt-stub",
+        "NEXT_PUBLIC_TELEGRAM_BOT_USERNAME": "vrt_stub_bot",
+        "OWNER_TELEGRAM_ID": "111111",
+        "VOIDNET_HMAC_SECRET": "vrt-test-hmac-secret",
+        "ANIMAYA_ENGINE_URL": "http://127.0.0.1:9999",
+        "DASHBOARD_TOKEN": "vrt-stub-dash-token"
+      },
+      "routes": [
+        { "slug": "login", "path": "/login" },
+        { "slug": "403",   "path": "/403" }
+      ],
+      "deferred": [
+        { "path": "/",                "reason": "requires owner Telegram auth" },
+        { "path": "/chat",            "reason": "requires auth + engine running" },
+        { "path": "/bridge",          "reason": "requires auth + voidnet HMAC pairing" },
+        { "path": "/modules",         "reason": "requires auth + modules registry" },
+        { "path": "/modules/[name]",  "reason": "requires auth + module fixture" }
+      ]
+    }
+  }
+}
