@@ -22,5 +22,8 @@
     "playwright": "^1.59.1",
     "pngjs": "^7.0.0",
     "style-dictionary": "^4.4.0"
+  },
+  "engines": {
+    "node": ">=18"
   }
 }

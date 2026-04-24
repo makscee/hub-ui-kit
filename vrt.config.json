@@ -1,5 +1,4 @@
 {
-  "$schema": "./vrt.config.schema.json",
   "defaults": {
     "viewport": { "width": 1280, "height": 800 },
     "threshold": 0.001,

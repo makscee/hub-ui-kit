@@ -15,8 +15,10 @@
  *
  * Design principles:
  *  - Read-only against workspace apps (we spawn their `next dev`, nothing else).
- *  - Best-effort boot: if an app refuses to serve `readyPath` within bootTimeoutMs,
- *    log it, skip its routes, don't fail the whole run.
+ *  - Strict failure: any boot failure (app refuses to serve `readyPath` within
+ *    bootTimeoutMs) or any per-route diff failure (diff % > diffThreshold) is a
+ *    hard failure — the run exits 1. Boot failures are logged with their app+reason
+ *    so CI can see which app broke, but they do not downgrade to warnings.
  *  - Disable animations + force system fonts (close-to-deterministic screenshots).
  *  - pixelmatch threshold is per-pixel colour tolerance (0.1 default).
  *  - diffThreshold is % of total pixels allowed to differ before failing.
