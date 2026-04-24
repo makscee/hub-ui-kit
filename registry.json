@@ -1,0 +1,121 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "hub",
+  "homepage": "https://github.com/makscee/hub",
+  "items": [
+    {
+      "name": "@hub/utils",
+      "type": "registry:lib",
+      "files": [
+        { "path": "registry/lib/utils.ts", "type": "registry:lib", "target": "lib/utils.ts" }
+      ]
+    },
+    {
+      "name": "@hub/tokens",
+      "type": "registry:style",
+      "files": [
+        { "path": "registry/styles/globals.css", "type": "registry:style", "target": "app/globals.css" }
+      ]
+    },
+    {
+      "name": "@hub/badge",
+      "type": "registry:ui",
+      "dependencies": ["class-variance-authority"],
+      "registryDependencies": ["@hub/utils"],
+      "files": [
+        { "path": "registry/components/ui/badge.tsx", "type": "registry:ui" }
+      ]
+    },
+    {
+      "name": "@hub/button",
+      "type": "registry:ui",
+      "dependencies": ["class-variance-authority", "@radix-ui/react-slot"],
+      "registryDependencies": ["@hub/utils"],
+      "files": [
+        { "path": "registry/components/ui/button.tsx", "type": "registry:ui" }
+      ]
+    },
+    {
+      "name": "@hub/card",
+      "type": "registry:ui",
+      "registryDependencies": ["@hub/utils"],
+      "files": [
+        { "path": "registry/components/ui/card.tsx", "type": "registry:ui" }
+      ]
+    },
+    {
+      "name": "@hub/dialog",
+      "type": "registry:ui",
+      "dependencies": ["@radix-ui/react-dialog", "lucide-react"],
+      "registryDependencies": ["@hub/utils"],
+      "files": [
+        { "path": "registry/components/ui/dialog.tsx", "type": "registry:ui" }
+      ]
+    },
+    {
+      "name": "@hub/input",
+      "type": "registry:ui",
+      "registryDependencies": ["@hub/utils"],
+      "files": [
+        { "path": "registry/components/ui/input.tsx", "type": "registry:ui" }
+      ]
+    },
+    {
+      "name": "@hub/select",
+      "type": "registry:ui",
+      "dependencies": ["@radix-ui/react-select", "lucide-react"],
+      "registryDependencies": ["@hub/utils"],
+      "files": [
+        { "path": "registry/components/ui/select.tsx", "type": "registry:ui" }
+      ]
+    },
+    {
+      "name": "@hub/sonner",
+      "type": "registry:ui",
+      "dependencies": ["sonner", "next-themes"],
+      "files": [
+        { "path": "registry/components/ui/sonner.tsx", "type": "registry:ui" }
+      ]
+    },
+    {
+      "name": "@hub/table",
+      "type": "registry:ui",
+      "registryDependencies": ["@hub/utils"],
+      "files": [
+        { "path": "registry/components/ui/table.tsx", "type": "registry:ui" }
+      ]
+    },
+    {
+      "name": "@hub/alert-card",
+      "type": "registry:block",
+      "registryDependencies": ["@hub/card", "@hub/badge", "@hub/utils"],
+      "files": [
+        { "path": "registry/blocks/AlertCard.tsx", "type": "registry:block", "target": "components/blocks/AlertCard.tsx" }
+      ]
+    },
+    {
+      "name": "@hub/audit-row",
+      "type": "registry:block",
+      "registryDependencies": ["@hub/table", "@hub/utils"],
+      "files": [
+        { "path": "registry/blocks/AuditRow.tsx", "type": "registry:block", "target": "components/blocks/AuditRow.tsx" }
+      ]
+    },
+    {
+      "name": "@hub/host-tile",
+      "type": "registry:block",
+      "registryDependencies": ["@hub/card", "@hub/badge", "@hub/utils"],
+      "files": [
+        { "path": "registry/blocks/HostTile.tsx", "type": "registry:block", "target": "components/blocks/HostTile.tsx" }
+      ]
+    },
+    {
+      "name": "@hub/nav-alert-badge",
+      "type": "registry:block",
+      "registryDependencies": ["@hub/badge", "@hub/utils"],
+      "files": [
+        { "path": "registry/blocks/NavAlertBadge.tsx", "type": "registry:block", "target": "components/blocks/NavAlertBadge.tsx" }
+      ]
+    }
+  ]
+}
