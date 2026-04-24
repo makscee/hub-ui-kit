@@ -79,11 +79,11 @@ import { AlertCard } from "@hub/ui-kit/blocks/AlertCard";
 
 ### Tokens
 
-Import the generated token CSS once in your app's `globals.css`, BEFORE the `tailwindcss` entry (Tailwind v4 reads `@theme` before compiling layers):
+Import `tailwindcss` first, then the generated token CSS. Tailwind v4 establishes its layer cascade on the first import, and subsequent `@theme` declarations merge into `@layer theme`. Reversing the order splits the tokens into a bare `:root` block, which compiles to a structurally different stylesheet (verified against voidnet portal, HUB-8).
 
 ```css
-@import '@hub/ui-kit/registry/styles/globals.css';
 @import 'tailwindcss';
+@import '@hub/ui-kit/registry/styles/globals.css';
 ```
 
 Regenerate the CSS after a token edit:
