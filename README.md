@@ -12,14 +12,11 @@ cd /Users/admin/hub/workspace && yarn install   # or: bun install
 
 ## Usage
 
-Import primitives directly by relative path or via a consumer-local TS path alias:
+Import primitives via the `@hub/ui-kit` workspace package:
 
 ```ts
-// With a TS path alias (e.g. tsconfig.json paths: "@ui-kit/*": ["../../../knowledge/standards/ui-kit/*"])
-import { Button } from "@ui-kit/primitives";
-
-// Without an alias — raw relative path
-import { Button } from "../../../knowledge/standards/ui-kit/primitives/button";
+// Canonical form — resolves through the yarn/bun workspace symlink
+import { Button } from "@hub/ui-kit/registry/primitives";
 ```
 
 No build step. No package publish. Consumers import `.tsx` source directly and Vite/Next/tsc handle transpilation.
@@ -29,7 +26,7 @@ No build step. No package publish. Consumers import `.tsx` source directly and V
 Each consumer's `app/globals.css` must import tokens **before** the `tailwindcss` entry so Tailwind v4 reads `@theme` before compiling layers:
 
 ```css
-@import "../../../knowledge/standards/ui-kit/tokens/tokens.css";
+@import "@hub/ui-kit/registry/tokens/tokens.css";
 @import "tailwindcss";
 ```
 

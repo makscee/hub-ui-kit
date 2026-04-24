@@ -33,8 +33,9 @@ See each `.tsx` for typed props. Tokens come from
 `packages/ui-kit/tokens/tokens.css` (must be imported before tailwindcss in the
 consuming app's globals.css, as documented in the root `README.md`).
 
-## Hub is SoT
+## Canonical location
 
-Canonical source is `~/hub/knowledge/standards/ui-kit/`. This directory is a
-vendored mirror (see `../.sync-from-hub`). To update: edit in hub, then run
-`scripts/sync-ui-kit.sh` from homelab root.
+This directory (`workspace/ui-kit/registry/blocks/`) is the canonical source
+for shared molecules, shipped as the `@hub/ui-kit` yarn/bun workspace package.
+Edit here directly; consumers resolve via the workspace symlink. No vendoring,
+no sync step.
