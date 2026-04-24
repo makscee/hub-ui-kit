@@ -1,0 +1,19 @@
+{
+  "name": "@hub/ui-kit",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Canonical design system for hub projects — DTCG tokens + shadcn local registry.",
+  "type": "module",
+  "scripts": {
+    "build-tokens": "node scripts/build-tokens.mjs"
+  },
+  "exports": {
+    "./registry/styles/globals.css": "./registry/styles/globals.css",
+    "./components/ui/*": "./registry/components/ui/*.tsx",
+    "./blocks/*": "./registry/blocks/*.tsx",
+    "./lib/utils": "./registry/lib/utils.ts"
+  },
+  "devDependencies": {
+    "style-dictionary": "^4.4.0"
+  }
+}
