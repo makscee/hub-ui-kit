@@ -6,6 +6,7 @@
   "type": "module",
   "scripts": {
     "build-tokens": "node scripts/build-tokens.mjs",
+    "build-tokens:check": "node scripts/build-tokens.mjs --check",
     "vrt": "node scripts/vrt.mjs",
     "vrt:update": "node scripts/vrt.mjs --update",
     "vrt:dry": "node scripts/vrt.mjs --dry-run"

@@ -19,7 +19,12 @@
 import StyleDictionary from 'style-dictionary';
 import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
-import { writeFileSync, mkdirSync, readFileSync } from 'node:fs';
+import { writeFileSync, mkdirSync, readFileSync, existsSync } from 'node:fs';
+
+// --check mode: regenerate in-memory, compare byte-for-byte against committed
+// globals.css, exit 1 if they diverge. Non-destructive: never writes to the
+// committed output file. Used by the CI drift guard.
+const CHECK_MODE = process.argv.includes('--check');
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname  = dirname(__filename);
@@ -211,6 +216,27 @@ lines.push('  }');
 lines.push('}');
 lines.push('');
 
+const generated = lines.join('\n');
+
+if (CHECK_MODE) {
+  if (!existsSync(OUT_FILE)) {
+    console.error(`build-tokens --check: committed output missing at ${OUT_FILE}`);
+    console.error('Regenerate: run `bun run build-tokens` in workspace/ui-kit/ and commit.');
+    process.exit(1);
+  }
+  const committed = readFileSync(OUT_FILE, 'utf8');
+  if (committed !== generated) {
+    console.error('build-tokens --check: DRIFT DETECTED');
+    console.error(`  Committed file:  ${OUT_FILE}`);
+    console.error('  does NOT match regenerated output from knowledge/standards/tokens.json');
+    console.error('');
+    console.error('Regenerate globals.css: run `bun run build-tokens` in workspace/ui-kit/ and commit.');
+    process.exit(1);
+  }
+  console.log(`build-tokens --check: OK (${OUT_FILE} matches regenerated output)`);
+  process.exit(0);
+}
+
 mkdirSync(OUT_DIR, { recursive: true });
-writeFileSync(OUT_FILE, lines.join('\n'), 'utf8');
+writeFileSync(OUT_FILE, generated, 'utf8');
 console.log(`build-tokens: wrote ${OUT_FILE} (${lines.length} lines)`);
