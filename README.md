@@ -2,6 +2,14 @@
 
 Shared UI primitives + design tokens consumed by every frontend in `workspace/` (animaya, voidnet, homelab apps/admin, etc.). Locked source of truth alongside `ui-style-spec.md` and `frontend-stack-spec.md`.
 
+## Installation
+
+`@hub/ui-kit` is a yarn/bun workspace package. It MUST be installed from the root workspace at `/Users/admin/hub/workspace/`, NOT from inside a nested workspace repo (`workspace/homelab/`, `workspace/voidnet/`, `workspace/animaya/`). Running `bun install` or `yarn install` from a nested repo will NOT create the `@hub/ui-kit` symlink in its `node_modules`.
+
+```bash
+cd /Users/admin/hub/workspace && yarn install   # or: bun install
+```
+
 ## Usage
 
 Import primitives directly by relative path or via a consumer-local TS path alias:
