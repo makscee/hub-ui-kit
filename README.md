@@ -2,7 +2,7 @@
 
 Canonical design system for every hub frontend (voidnet portal, animaya dashboard, homelab admin, future apps). Source of truth alongside `knowledge/standards/ui-style-spec.md` and `knowledge/standards/frontend-stack-spec.md` (both locked).
 
-This README is also the ingest target for Claude Design (`claude.ai/design`, Anthropic Labs research preview). Paths below are stable so the design-time UI can reliably surface tokens + components. When Claude Design produces a change, follow the round-trip in `knowledge/standards/claude-design-workflow.md`.
+This README is also the ingest target for Claude Design (`claude.ai/design`, Anthropic Labs research preview). Paths below are stable so the design-time UI can reliably surface tokens + components. When Claude Design produces a change, follow the round-trip in `knowledge/standards/claude-design-workflow.md` (created in T2 of HUB-8).
 
 ## Repo map
 
@@ -51,14 +51,23 @@ cd /Users/admin/hub/workspace
 yarn install          # or: bun install
 ```
 
-Yarn 1.22 requires the dep to be declared as `"@hub/ui-kit": "*"` in consumers, not `"workspace:*"` (tracked as HUB-1).
+Yarn 1.22 requires the dep to be declared as `"@hub/ui-kit": "*"` in consumers, not `"workspace:*"` (Yarn 1.22 workspace protocol limitation — tracked as HUB-1).
 
 ## Consume
 
 ### Install a primitive via shadcn local registry
 
+shadcn resolves `@hub/*` names from `workspace/ui-kit/registry.json` — pass `--registry` so it doesn't look at the public shadcn registry:
+
 ```bash
-bunx shadcn@latest add @hub/button
+# Run from the consumer app directory (e.g. workspace/homelab/apps/admin)
+bunx shadcn@latest add --registry /Users/admin/hub/workspace/ui-kit/registry.json @hub/button
+```
+
+Or with a relative path from the consumer:
+
+```bash
+bunx shadcn@latest add --registry ../../../../ui-kit/registry.json @hub/button
 ```
 
 ### Import directly (workspace symlink)
@@ -100,7 +109,7 @@ The design-time UI at `claude.ai/design` should surface:
 3. Primitive source: `workspace/ui-kit/registry/components/ui/*.tsx`
 4. Block source: `workspace/ui-kit/registry/blocks/*.tsx`
 
-Workflow doc: `knowledge/standards/claude-design-workflow.md`.
+Workflow doc: `knowledge/standards/claude-design-workflow.md` (created in T2 of HUB-8).
 
 ## No versioning, no build step (D-22-05)
 
