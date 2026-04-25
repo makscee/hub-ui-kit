@@ -1,4 +1,4 @@
-/* Generated from knowledge/standards/tokens.json by workspace/ui-kit/scripts/build-tokens.mjs. Do not edit. */
+/* Generated from tokens/tokens.json by scripts/build-tokens.mjs. Do not edit. */
 
 @custom-variant dark (&:is(.dark *));
 

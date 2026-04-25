@@ -2,8 +2,8 @@
 /**
  * Deterministic DTCG -> globals.css generator.
  *
- * Source:  hub/knowledge/standards/tokens.json   (DTCG format)
- * Output:  workspace/ui-kit/registry/styles/globals.css
+ * Source:  tokens/tokens.json   (DTCG format)
+ * Output:  registry/styles/globals.css
  *
  * Built on Style Dictionary v4 with the built-in `dtcg` preprocessor
  * (DTCG gotcha from HUB-1 spike: custom formats must dereference token.$value, not token.value).
@@ -28,8 +28,8 @@ const CHECK_MODE = process.argv.includes('--check');
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname  = dirname(__filename);
-const REPO_ROOT  = resolve(__dirname, '..', '..', '..');
-const TOKENS_SRC = resolve(REPO_ROOT, 'knowledge', 'standards', 'tokens.json');
+const REPO_ROOT  = resolve(__dirname, '..');
+const TOKENS_SRC = resolve(REPO_ROOT, 'tokens', 'tokens.json');
 const OUT_DIR    = resolve(__dirname, '..', 'registry', 'styles');
 const OUT_FILE   = resolve(OUT_DIR, 'globals.css');
 
@@ -97,7 +97,7 @@ const radiusBase = getValue(['radius', 'base']); // e.g. "0.5rem"
 // --- emit ------------------------------------------------------------------
 
 const lines = [];
-lines.push('/* Generated from knowledge/standards/tokens.json by workspace/ui-kit/scripts/build-tokens.mjs. Do not edit. */');
+lines.push('/* Generated from tokens/tokens.json by scripts/build-tokens.mjs. Do not edit. */');
 lines.push('');
 lines.push('@custom-variant dark (&:is(.dark *));');
 lines.push('');
@@ -228,9 +228,9 @@ if (CHECK_MODE) {
   if (committed !== generated) {
     console.error('build-tokens --check: DRIFT DETECTED');
     console.error(`  Committed file:  ${OUT_FILE}`);
-    console.error('  does NOT match regenerated output from knowledge/standards/tokens.json');
+    console.error('  does NOT match regenerated output from tokens/tokens.json');
     console.error('');
-    console.error('Regenerate globals.css: run `bun run build-tokens` in workspace/ui-kit/ and commit.');
+    console.error('Regenerate globals.css: run `bun run build-tokens` in repo root and commit.');
     process.exit(1);
   }
   console.log(`build-tokens --check: OK (${OUT_FILE} matches regenerated output)`);
