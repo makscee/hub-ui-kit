@@ -1,22 +1,24 @@
 # @hub/ui-kit
 
-Canonical design system for every hub frontend (voidnet portal, animaya dashboard, homelab admin, future apps). Source of truth alongside `knowledge/standards/ui-style-spec.md` and `knowledge/standards/frontend-stack-spec.md` (both locked).
+Canonical design system for every hub frontend (voidnet portal, animaya dashboard, homelab admin, future apps). Source of truth alongside hub's locked specs at `knowledge/standards/ui-style-spec.md` and `knowledge/standards/frontend-stack-spec.md` (in `github.com/makscee/hub`).
 
-This README is also the ingest target for Claude Design (`claude.ai/design`, Anthropic Labs research preview). Paths below are stable so the design-time UI can reliably surface tokens + components. When Claude Design produces a change, follow the round-trip in `knowledge/standards/claude-design-workflow.md` (created in T2 of HUB-8).
+This README is also the ingest target for Claude Design (`claude.ai/design`, Anthropic Labs research preview). Paths below are stable so the design-time UI can reliably surface tokens + components.
+
+History: extracted from `github.com/makscee/hub` (path `workspace/ui-kit/`) on 2026-04-25 as part of HUB-13. The yarn workspace root in hub still resolves `@hub/ui-kit` via a clone of this repo at `workspace/ui-kit/`.
 
 ## Repo map
 
 | Artifact | Path |
 |---|---|
-| Tokens (source, DTCG) | `knowledge/standards/tokens.json` |
-| Tokens (generated CSS) | `workspace/ui-kit/registry/styles/globals.css` |
-| Primitives | `workspace/ui-kit/registry/components/ui/` |
-| Blocks | `workspace/ui-kit/registry/blocks/` |
-| Helpers | `workspace/ui-kit/registry/lib/` |
-| UI style spec (locked) | `knowledge/standards/ui-style-spec.md` |
-| Frontend stack spec (locked) | `knowledge/standards/frontend-stack-spec.md` |
-| VRT harness | `workspace/ui-kit/scripts/vrt.mjs` |
-| VRT baselines | `workspace/ui-kit/vrt-baseline/` |
+| Tokens (source, DTCG) | `tokens/tokens.json` |
+| Tokens (generated CSS) | `registry/styles/globals.css` |
+| Primitives | `registry/components/ui/` |
+| Blocks | `registry/blocks/` |
+| Helpers | `registry/lib/` |
+| UI style spec (locked) | hub: `knowledge/standards/ui-style-spec.md` |
+| Frontend stack spec (locked) | hub: `knowledge/standards/frontend-stack-spec.md` |
+| VRT harness | `scripts/vrt.mjs` |
+| VRT baselines | `vrt-baseline/` |
 
 ## Component inventory
 
@@ -42,31 +44,27 @@ This README is also the ingest target for Claude Design (`claude.ai/design`, Ant
 | HostTile | Infra host-status tile | `blocks/HostTile.tsx` |
 | NavAlertBadge | Badge-variant for nav unread counts | `blocks/NavAlertBadge.tsx` |
 
-## Install
+## Install (current: yarn workspace via hub)
 
-`@hub/ui-kit` is a Yarn/Bun workspace package. Install from the workspace root, never from a nested repo:
+`@hub/ui-kit` is consumed today as a Yarn/Bun workspace package via hub's `workspace/package.json`. Clone hub, then this repo lives at `workspace/ui-kit/`:
 
 ```bash
 cd /Users/admin/hub/workspace
 yarn install          # or: bun install
 ```
 
-Yarn 1.22 requires the dep to be declared as `"@hub/ui-kit": "*"` in consumers, not `"workspace:*"` (Yarn 1.22 workspace protocol limitation — tracked as HUB-1).
+Yarn 1.22 requires the dep to be declared as `"@hub/ui-kit": "*"` in consumers, not `"workspace:*"` (HUB-1).
+
+A future migration (HUB-15/16/17) moves consumers to vendored shadcn copies and retires the hub workspace root (HUB-18).
 
 ## Consume
 
 ### Install a primitive via shadcn local registry
 
-shadcn resolves `@hub/*` names from `workspace/ui-kit/registry.json` — pass `--registry` so it doesn't look at the public shadcn registry:
+shadcn resolves `@hub/*` names from `registry.json` — pass `--registry` so it doesn't look at the public shadcn registry:
 
 ```bash
-# Run from the consumer app directory (e.g. workspace/homelab/apps/admin)
-bunx shadcn@latest add --registry /Users/admin/hub/workspace/ui-kit/registry.json @hub/button
-```
-
-Or with a relative path from the consumer:
-
-```bash
+# Run from a consumer app directory; relative path resolves to the local clone at workspace/ui-kit/
 bunx shadcn@latest add --registry ../../../../ui-kit/registry.json @hub/button
 ```
 
@@ -89,7 +87,7 @@ Import `tailwindcss` first, then the generated token CSS. Tailwind v4 establishe
 Regenerate the CSS after a token edit:
 
 ```bash
-cd workspace/ui-kit
+# from this repo's root
 yarn build-tokens
 ```
 
@@ -97,20 +95,18 @@ yarn build-tokens
 
 - **Primitive** — stateless, from shadcn or equivalent, no domain knowledge → `registry/components/ui/<name>.tsx` + add to `registry/components/ui/index.ts`.
 - **Block** — uses multiple primitives + carries product-specific layout/behavior → `registry/blocks/<Name>.tsx` + add to `registry/blocks/index.ts`. Import primitives via `@hub/ui-kit/components/ui/<name>` (NOT relative paths — keep ingest-friendly).
-- **Tokens only** — edit `knowledge/standards/tokens.json`; run `yarn build-tokens`; commit both files.
-- Match `knowledge/standards/ui-style-spec.md` (spacing, radius, typography) — locked spec.
+- **Tokens only** — edit `tokens/tokens.json`; run `yarn build-tokens`; commit both files.
+- Match `knowledge/standards/ui-style-spec.md` in hub (spacing, radius, typography) — locked spec.
 
 ## Claude Design ingest
 
 The design-time UI at `claude.ai/design` should surface:
 
-1. The token file: `knowledge/standards/tokens.json`
-2. The generated CSS: `workspace/ui-kit/registry/styles/globals.css`
-3. Primitive source: `workspace/ui-kit/registry/components/ui/*.tsx`
-4. Block source: `workspace/ui-kit/registry/blocks/*.tsx`
-
-Workflow doc: `knowledge/standards/claude-design-workflow.md` (created in T2 of HUB-8).
+1. The token file: `tokens/tokens.json`
+2. The generated CSS: `registry/styles/globals.css`
+3. Primitive source: `registry/components/ui/*.tsx`
+4. Block source: `registry/blocks/*.tsx`
 
 ## No versioning, no build step (D-22-05)
 
-`@hub/ui-kit` is shared source — not a published package. No semver, no changelog. Breakage risk is managed by each consumer's test suite + the VRT harness here. If you make a breaking change to a primitive, grep consumers (`rg "from.*@hub/ui-kit"`) and update them in the same commit.
+`@hub/ui-kit` is shared source — not a published package. No semver, no changelog. Breakage risk is managed by each consumer's test suite + the VRT harness here. If you make a breaking change to a primitive, grep consumers (`rg "from.*@hub/ui-kit"` across hub's `workspace/`) and update them in the same commit.
